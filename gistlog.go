@@ -102,7 +102,7 @@ func (g *log) buildGist(data []string) createGistFn {
 			return gist{}, err
 		}
 
-		content := buf.String()
+		content := strings.TrimSuffix(buf.String(), "\n")
 
 		return gist{
 			Files: map[string]gistFile{filename: {
