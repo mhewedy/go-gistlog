@@ -9,9 +9,7 @@ import (
 
 func _TestNewLog(t *testing.T) {
 
-	log := gistlog.NewLog("<PUT GIST ID HERE>", func() string {
-		return "<PUT VALID GITHUB TOKEN HERE>"
-	})
+	log := gistlog.NewLog("<PUT GIST ID HERE>", "<PUT VALID GITHUB TOKEN HERE>")
 
 	fmt.Println("Inserting data into a new/existing file in the specified gist id")
 	err := log.Insert("aNewFileInTheGist", []string{"val1", "val3"})

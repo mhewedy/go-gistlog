@@ -7,9 +7,7 @@ Each Gist created can have multiple files. So think in the gist as a **Database*
 Gists API calls are restricted by [rate-limiting](https://docs.github.com/en/developers/apps/rate-limits-for-github-apps), you need to be aware of that.
 
 ```golang
-log := gistlog.NewLog("<PUT GIST ID HERE>", func() string {
-	return "<PUT VALID GITHUB TOKEN HERE>"
-})
+log := gistlog.NewLog("<PUT GIST ID HERE>", "<PUT VALID GITHUB TOKEN HERE>")
 
 //Inserting data into a new/existing file in the specified gist id above
 err := log.Insert("aNewFileInTheGist", []string{
