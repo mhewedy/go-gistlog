@@ -3,10 +3,11 @@ package gistlog_test
 import (
 	"fmt"
 	"github.com/mhewedy/go-gistlog"
+	"testing"
 	"time"
 )
 
-func Example() {
+func _TestNewLog(t *testing.T) {
 
 	log := gistlog.NewLog("<PUT GIST ID HERE>", func() string {
 		return "<PUT VALID GITHUB TOKEN HERE>"
@@ -23,5 +24,5 @@ func Example() {
 	fmt.Println("Read data from gist by file name")
 	fmt.Println(log.Read("aNewFileInTheGist"))
 
-	time.Sleep(30 * time.Second) // wait for the async to be written
+	time.Sleep(10 * time.Second) // wait for the async to be written
 }

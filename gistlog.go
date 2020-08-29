@@ -2,8 +2,11 @@ package gistlog
 
 import (
 	"bytes"
+	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -46,7 +49,16 @@ func (g *log) InsertAsync(filename string, data []string) {
 	}()
 }
 
-func (g *log) Read(filename string) (string, error) {
+func (g *log) Read(filename string) ([][]string, error) {
+	read, err := g.read(filename)
+	if err != nil {
+		return nil, err
+	}
+	reader := csv.NewReader(strings.NewReader(read))
+	return reader.ReadAll()
+}
+
+func (g *log) read(filename string) (string, error) {
 	req, err := http.NewRequest(http.MethodGet, gistApiBaseUrl+g.gistId, nil)
 	if err != nil {
 		return "", err
@@ -60,6 +72,10 @@ func (g *log) Read(filename string) (string, error) {
 	}
 	defer resp.Body.Close()
 
+	if err := checkHTTPResponse(resp); err != nil {
+		return "", err
+	}
+
 	decoder := json.NewDecoder(resp.Body)
 	var gist gist
 	err = decoder.Decode(&gist)
@@ -72,12 +88,21 @@ func (g *log) Read(filename string) (string, error) {
 func (g *log) buildGist(data []string) createGistFn {
 	return func(filename string) (gist, error) {
 
-		prevContent, err := g.Read(filename)
+		prevContent, err := g.read(filename)
 		if err != nil {
 			return gist{}, err
 		}
 
-		content := strings.Join(data, ",")
+		buf := &bytes.Buffer{}
+		w := csv.NewWriter(buf)
+		err = w.Write(data)
+		w.Flush()
+
+		if err != nil {
+			return gist{}, err
+		}
+
+		content := buf.String()
 
 		return gist{
 			Files: map[string]gistFile{filename: {
@@ -120,10 +145,18 @@ func (g *log) updateFile(filename string, fn createGistFn) error {
 	}
 	defer resp.Body.Close()
 
-	return nil
+	return checkHTTPResponse(resp)
 }
 
 func setHeaders(req *http.Request, token string) {
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 	req.Header.Set("Authorization", "token "+token)
+}
+
+func checkHTTPResponse(resp *http.Response) error {
+	if resp.StatusCode >= http.StatusBadRequest {
+		b, _ := ioutil.ReadAll(resp.Body)
+		return fmt.Errorf("HTTP Status: %d, %s", resp.StatusCode, string(b))
+	}
+	return nil
 }
