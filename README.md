@@ -22,7 +22,7 @@ err := log.Insert("aNewFileInTheGist", []string{
 fmt.Println(err)
 
 // Inserting data asynchronously into a new/existing file in the specified gist id,
-//	in such case errors are ignored
+// in such case errors are ignored
 log.InsertAsync("yetAnotherNewFile", []string{
 	"val1",
 	"val2",
