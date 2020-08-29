@@ -1,6 +1,6 @@
 # go-gistlog
 
-Golang Library to use Github Gists as a simpale NoSQL database.
+Golang Library to use Github Gists as a simple NoSQL database.
 
 Each Gist created can have multiple files. So think in the gist as a **Database**, and in the file inside the gist as a **Table**.
 
