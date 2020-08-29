@@ -1,8 +1,8 @@
 # go-gistlog
 
-Uses Github Gists as a log database.
+Golang Library to use Github Gists as a simpale NoSQL database.
 
-Each Gist created can have multiple files. So think in the gist as a database, and in the file inside the gist as a Table.
+Each Gist created can have multiple files. So think in the gist as a **Database**, and in the file inside the gist as a **Table**.
 
 Gists API calls are restricted by [rate-limiting](https://docs.github.com/en/developers/apps/rate-limits-for-github-apps), you need to be aware of that.
 
