@@ -9,10 +9,9 @@ Gists resemble a NoSQL databases.
 Gists are restricted by [rate-limiting](https://docs.github.com/en/developers/apps/rate-limits-for-github-apps), you need to be aware of that.
 
 ```golang
-gistId := "<PUT GIST ID HERE>"
-githubTokenWithGistPermission := "<PUT VALID GITHUB TOKEN HERE>"
-
-log := gistlog.NewLog(gistId, githubTokenWithGistPermission)
+log := gistlog.NewLog("<PUT GIST ID HERE>", func() string {
+	return "<PUT VALID GITHUB TOKEN HERE>"
+})
 
 fmt.Println("Inserting data into a new/existing file in the specified gist id")
 err := log.Insert("aNewFileInTheGist", []string{"val1", "val3"})

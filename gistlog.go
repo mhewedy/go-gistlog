@@ -29,10 +29,10 @@ type log struct {
 
 type createGistFn func(string) (gist, error)
 
-func NewLog(gistId, token string) *log {
+func NewLog(gistId string, token func() string) *log {
 	return &log{
 		gistId: gistId,
-		token:  token,
+		token:  token(),
 	}
 }
 
